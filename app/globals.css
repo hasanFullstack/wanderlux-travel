@@ -110,6 +110,14 @@
   }
 }
 
+/* Elements that GSAP animates in start hidden to avoid a flash of content.
+   Only applies when motion is allowed; a <noscript> override lives in layout. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-hide] {
+    visibility: hidden;
+  }
+}
+
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
   html {

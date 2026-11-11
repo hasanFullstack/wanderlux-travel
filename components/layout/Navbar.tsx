@@ -11,7 +11,7 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const SCROLL_THRESHOLD = 24;
-const phoneHref = `tel:${siteConfig.contact.phone.replace(/[^\d+]/g, "")}`;
+const { phone, phoneHref, email, emailHref } = siteConfig.contact;
 
 function subscribeToScroll(callback: () => void) {
   window.addEventListener("scroll", callback, { passive: true });
@@ -117,7 +117,7 @@ export function Navbar() {
           aria-label="Main"
           className="container-page flex items-center justify-between gap-6"
         >
-          <Logo tone={solid ? "dark" : "light"} onClick={close} />
+          <Logo tone={solid ? "dark" : "light"} idSuffix="nav" onClick={close} />
 
           <ul className="hidden items-center gap-1 lg:flex">
             {siteConfig.nav.map((item) => {
@@ -166,7 +166,7 @@ export function Navbar() {
               )}
             >
               <Phone className="size-4" aria-hidden="true" />
-              {siteConfig.contact.phone}
+              {phone}
             </a>
             <Button
               href="/contact"
@@ -252,14 +252,14 @@ export function Navbar() {
             className="inline-flex items-center gap-3 hover:text-white"
           >
             <Phone className="size-4 text-gold-300" aria-hidden="true" />
-            {siteConfig.contact.phone}
+            {phone}
           </a>
           <a
-            href={`mailto:${siteConfig.contact.email}`}
+            href={emailHref}
             className="inline-flex items-center gap-3 hover:text-white"
           >
             <Mail className="size-4 text-gold-300" aria-hidden="true" />
-            {siteConfig.contact.email}
+            {email}
           </a>
           <Button
             href="/contact"

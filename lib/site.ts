@@ -12,10 +12,12 @@ export const siteConfig = {
     "Wanderlux Travel is a full-service travel agency for visa assistance, flight tickets, hotel stays and car rentals — planned by experts, booked in minutes.",
   url: siteUrl,
   contact: {
-    phone: "+1 (555) 014-2290",
-    email: "hello@wanderlux.example",
-    address: "221 Harbor Avenue, Suite 400, San Diego, CA",
-    hours: "Mon – Sat, 9:00 – 19:00",
+    phone: "+92 315 5859158",
+    phoneHref: "tel:+923155859158",
+    email: "hasanamin877@gmail.com",
+    emailHref: "mailto:hasanamin877@gmail.com",
+    address: "Available worldwide — online & by appointment",
+    hours: "Mon – Sat, 9:00 – 19:00 (PKT)",
   },
   nav: [
     { label: "Home", href: "/" },
