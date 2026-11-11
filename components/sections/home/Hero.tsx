@@ -4,8 +4,18 @@ import { useRef, type ReactNode } from "react";
 import Image from "next/image";
 import { ArrowRight, BadgeCheck, Plane, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { destinations } from "@/data/destinations";
+import { flights } from "@/data/flights";
 import { testimonials } from "@/data/testimonials";
 import { MOTION, gsap, useGSAP } from "@/lib/gsap";
+import { cn, formatPrice } from "@/lib/utils";
+
+const featured = destinations[0];
+const dealFlight =
+  flights.find((f) => f.from.code === "LHE" && f.to.code === "DXB" && f.cabin === "Economy") ??
+  flights[0];
+const glassCard =
+  "rounded-3xl border border-white/15 bg-white/10 p-3 shadow-lift backdrop-blur-xl";
 
 type HeroProps = {
   /** Search widget rendered at the bottom of the hero. */
@@ -80,14 +90,13 @@ export function Hero({ search }: HeroProps) {
             1.3,
           );
 
-        // Gentle idle float on the glass cards.
+        // Gentle idle float on the card column (moves as one to keep alignment).
         gsap.to("[data-hero-float]", {
-          y: -12,
-          duration: 3.2,
+          y: -10,
+          duration: 3.4,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
-          stagger: { each: 0.8 },
         });
 
         // Background drifts slower than the page while scrolling away.
@@ -175,9 +184,9 @@ export function Hero({ search }: HeroProps) {
               to go.
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-4">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <div data-hero-cta data-hero-hide>
-                <Button href="#destinations" variant="gold" size="lg">
+                <Button href="#destinations" variant="gold" size="lg" className="w-full sm:w-auto">
                   Explore destinations
                   <ArrowRight
                     className="size-4 transition-transform duration-300 group-hover/btn:translate-x-1"
@@ -186,7 +195,7 @@ export function Hero({ search }: HeroProps) {
                 </Button>
               </div>
               <div data-hero-cta data-hero-hide>
-                <Button href="/contact" variant="light" size="lg">
+                <Button href="/contact" variant="light" size="lg" className="w-full sm:w-auto">
                   Talk to an expert
                 </Button>
               </div>
@@ -223,65 +232,75 @@ export function Hero({ search }: HeroProps) {
             </div>
           </div>
 
-          {/* Floating highlight cards */}
-          <div className="relative hidden h-[30rem] lg:col-span-5 lg:block" aria-hidden="true">
-            <div data-hero-card data-hero-hide className="absolute top-4 right-0 w-72">
-              <div
-                data-hero-float
-                className="overflow-hidden rounded-3xl border border-white/15 bg-white/10 p-3 shadow-lift backdrop-blur-xl"
-              >
+          {/* Highlight cards — one aligned column, equal widths */}
+          <div className="hidden lg:col-span-5 lg:flex lg:justify-end" aria-hidden="true">
+            <div data-hero-float className="flex w-80 flex-col gap-4 xl:w-[21rem]">
+              <div data-hero-card data-hero-hide className={glassCard}>
                 <div className="relative h-40 overflow-hidden rounded-2xl">
                   <Image
-                    src="/images/destinations/santorini.jpg"
+                    src={featured.image}
                     alt=""
                     fill
-                    sizes="288px"
+                    sizes="336px"
                     className="object-cover"
                   />
                   <span className="absolute top-3 left-3 rounded-full bg-ink-950/70 px-3 py-1 text-[0.7rem] font-semibold tracking-wide backdrop-blur">
                     Featured escape
                   </span>
+                  <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-ink-950/70 px-2.5 py-1 text-[0.7rem] font-semibold backdrop-blur">
+                    <Star className="size-3 fill-gold-300 text-gold-300" />
+                    {featured.rating.toFixed(1)}
+                  </span>
                 </div>
-                <div className="flex items-end justify-between px-2 pt-3 pb-1">
-                  <div>
-                    <p className="font-display text-lg">Santorini, Greece</p>
-                    <p className="text-xs text-ink-200">6 nights · Flights + hotel</p>
+                <div className="flex items-end justify-between gap-3 px-1.5 pt-3 pb-1">
+                  <div className="min-w-0">
+                    <p className="truncate font-display text-lg">
+                      {featured.name}, {featured.country}
+                    </p>
+                    <p className="text-xs text-ink-200">
+                      {featured.nights} nights · Flights + hotel
+                    </p>
                   </div>
-                  <p className="text-right text-xs text-ink-200">
+                  <p className="shrink-0 text-right text-[0.7rem] text-ink-200">
                     from
-                    <span className="block text-lg font-bold text-gold-300">$1,290</span>
+                    <span className="block text-base font-bold text-gold-300">
+                      {formatPrice(featured.priceFrom)}
+                    </span>
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div data-hero-card data-hero-hide className="absolute top-60 left-0">
-              <div
-                data-hero-float
-                className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 py-3 pr-5 pl-3 shadow-lift backdrop-blur-xl"
-              >
-                <span className="grid size-11 place-items-center rounded-xl bg-brand-500/90">
+              <div data-hero-card data-hero-hide className={cn(glassCard, "flex items-center gap-3 pr-4")}>
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-500">
                   <BadgeCheck className="size-6" />
                 </span>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">Visa approved</p>
                   <p className="text-xs text-ink-200">Canada · in 11 days</p>
                 </div>
+                <span className="rounded-full bg-brand-400/20 px-2.5 py-1 text-[0.7rem] font-semibold text-brand-200">
+                  98% rate
+                </span>
               </div>
-            </div>
 
-            <div data-hero-card data-hero-hide className="absolute right-10 bottom-6">
-              <div
-                data-hero-float
-                className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 py-3 pr-5 pl-3 shadow-lift backdrop-blur-xl"
-              >
-                <span className="grid size-11 place-items-center rounded-xl bg-gold-400 text-ink-950">
+              <div data-hero-card data-hero-hide className={cn(glassCard, "flex items-center gap-3 pr-4")}>
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold-400 text-ink-950">
                   <Plane className="size-5" />
                 </span>
-                <div>
-                  <p className="text-sm font-semibold">Lahore → Dubai</p>
-                  <p className="text-xs text-ink-200">Tomorrow 04:10 · from $210</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">
+                    {dealFlight.from.city} → {dealFlight.to.city}
+                  </p>
+                  <p className="text-xs text-ink-200">
+                    Daily {dealFlight.departTime} · Non-stop
+                  </p>
                 </div>
+                <p className="shrink-0 text-right text-[0.7rem] text-ink-200">
+                  from
+                  <span className="block text-sm font-bold text-gold-300">
+                    {formatPrice(dealFlight.price)}
+                  </span>
+                </p>
               </div>
             </div>
           </div>

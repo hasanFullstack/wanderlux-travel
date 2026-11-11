@@ -6,15 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
+// All mock prices are stored in Pakistani Rupees. A fixed "PKR" prefix with
+// en-US grouping renders identically on server and client (no ICU drift).
+const numberFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-/** Format a number as a whole-dollar USD price, e.g. 1290 → "$1,290". */
+/** Format a PKR amount, e.g. 59000 → "PKR 59,000". */
 export function formatPrice(value: number) {
-  return currencyFormatter.format(value);
+  return `PKR ${numberFormatter.format(value)}`;
 }
 
 /** Resolve after `ms` milliseconds — used to simulate network latency. */
