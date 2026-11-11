@@ -265,18 +265,17 @@ export function ResultsSection({
               {children}
             </ul>
             {pagination && pagination.pageCount > 1 && (
-              <div className="mt-10 flex flex-col items-center gap-5 border-t border-ink-100 pt-8 sm:flex-row sm:justify-between">
-                <p className="text-sm text-ink-500" aria-live="polite">
-                  Showing <span className="font-semibold text-ink-900">{pagination.start}–{pagination.end}</span> of{" "}
-                  <span className="font-semibold text-ink-900">{pagination.total}</span> {noun}s
-                </p>
+              <div className="mt-12 flex flex-col items-center gap-4">
                 <Pagination
                   page={pagination.page}
                   pageCount={pagination.pageCount}
                   onPageChange={goToPage}
                   label={`${noun.charAt(0).toUpperCase()}${noun.slice(1)}`}
-                  className="w-full sm:w-auto"
                 />
+                <p className="text-sm text-ink-500" aria-live="polite">
+                  Showing <span className="font-semibold text-ink-900">{pagination.start}–{pagination.end}</span> of{" "}
+                  <span className="font-semibold text-ink-900">{pagination.total}</span> {noun}s
+                </p>
               </div>
             )}
           </>

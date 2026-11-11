@@ -10,7 +10,9 @@ export function SearchSubmit({ label = "Search" }: { label?: string }) {
       className="h-16 w-full rounded-2xl px-8 sm:col-span-2 lg:w-auto"
     >
       <Search className="size-5" aria-hidden="true" />
-      {label}
+      {/* Full label on mobile/tablet and wide screens; short label where the row is tight. */}
+      <span className="lg:hidden xl:inline">{label}</span>
+      <span className="hidden lg:inline xl:hidden">Search</span>
     </Button>
   );
 }

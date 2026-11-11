@@ -208,7 +208,7 @@ export function Hero({ search }: HeroProps) {
               data-hero-hide
               className="mt-10 flex items-center gap-4"
             >
-              <div className="flex -space-x-3">
+              <div className="flex shrink-0 -space-x-3">
                 {avatars.map((person) => (
                   <Image
                     key={person.id}
@@ -216,11 +216,11 @@ export function Hero({ search }: HeroProps) {
                     alt=""
                     width={44}
                     height={44}
-                    className="size-11 rounded-full border-2 border-ink-950 object-cover"
+                    className="size-10 rounded-full border-2 border-ink-950 object-cover sm:size-11"
                   />
                 ))}
               </div>
-              <div className="text-sm">
+              <div className="min-w-0 text-sm">
                 <div className="flex items-center gap-1 text-gold-300" aria-hidden="true">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="size-4 fill-current" />

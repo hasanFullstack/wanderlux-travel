@@ -61,34 +61,45 @@ type PaginationProps = {
   className?: string;
 };
 
-const navButton =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-800 transition-colors duration-300 " +
-  "hover:border-ink-900 hover:bg-ink-900 hover:text-white disabled:pointer-events-none disabled:opacity-40";
+const arrowButton =
+  "group/arrow inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold text-ink-800 transition-colors duration-300 " +
+  "hover:bg-ink-900 hover:text-white disabled:pointer-events-none disabled:text-ink-300";
 
-/** Accessible pagination: prev/next, numbered pages with ellipses. */
+/**
+ * Accessible pagination bar: a white pill holding prev/next and numbered
+ * pages (with ellipses). Collapses to "Page X of Y" on small screens.
+ */
 export function Pagination({ page, pageCount, onPageChange, label, className }: PaginationProps) {
   if (pageCount <= 1) return null;
   const items = getPageItems(page, pageCount);
 
   return (
-    <nav aria-label={`${label} pages`} className={cn("flex items-center justify-between gap-3 sm:justify-center", className)}>
+    <nav
+      aria-label={`${label} pages`}
+      className={cn(
+        "flex w-full items-center justify-between gap-1 rounded-full bg-white p-1.5 shadow-soft ring-1 ring-ink-100 sm:inline-flex sm:w-auto",
+        className,
+      )}
+    >
       <button
         type="button"
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className={navButton}
-        aria-label="Previous page"
+        className={arrowButton}
       >
-        <ChevronLeft className="size-4" aria-hidden="true" />
-        <span className="hidden sm:inline">Previous</span>
+        <ChevronLeft className="size-4 transition-transform duration-300 group-hover/arrow:-translate-x-0.5" aria-hidden="true" />
+        <span className="sr-only sm:not-sr-only">Previous</span>
       </button>
 
+      <span aria-hidden="true" className="hidden h-6 w-px bg-ink-100 sm:block" />
+
       {/* Compact indicator on small screens */}
-      <p className="text-sm font-semibold text-ink-700 sm:hidden" aria-hidden="true">
-        Page {page} of {pageCount}
+      <p className="px-2 text-sm text-ink-500 sm:hidden" aria-hidden="true">
+        Page <span className="font-semibold text-ink-900">{page}</span> of{" "}
+        <span className="font-semibold text-ink-900">{pageCount}</span>
       </p>
 
-      <ul className="hidden items-center gap-1.5 sm:flex">
+      <ul className="hidden items-center gap-1 px-1 sm:flex">
         {items.map((item) =>
           typeof item === "number" ? (
             <li key={item}>
@@ -100,8 +111,8 @@ export function Pagination({ page, pageCount, onPageChange, label, className }: 
                 className={cn(
                   "grid size-11 place-items-center rounded-full text-sm font-semibold tabular-nums transition-[background-color,color,box-shadow] duration-300",
                   item === page
-                    ? "bg-ink-900 text-white shadow-soft"
-                    : "text-ink-600 hover:bg-white hover:text-ink-900 hover:ring-1 hover:ring-ink-200",
+                    ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-[0_10px_24px_-10px] shadow-brand-600/80"
+                    : "text-ink-600 hover:bg-brand-50 hover:text-brand-700",
                 )}
               >
                 {item}
@@ -115,15 +126,16 @@ export function Pagination({ page, pageCount, onPageChange, label, className }: 
         )}
       </ul>
 
+      <span aria-hidden="true" className="hidden h-6 w-px bg-ink-100 sm:block" />
+
       <button
         type="button"
         onClick={() => onPageChange(page + 1)}
         disabled={page === pageCount}
-        className={navButton}
-        aria-label="Next page"
+        className={arrowButton}
       >
-        <span className="hidden sm:inline">Next</span>
-        <ChevronRight className="size-4" aria-hidden="true" />
+        <span className="sr-only sm:not-sr-only">Next</span>
+        <ChevronRight className="size-4 transition-transform duration-300 group-hover/arrow:translate-x-0.5" aria-hidden="true" />
       </button>
     </nav>
   );

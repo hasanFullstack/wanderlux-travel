@@ -97,7 +97,7 @@ export function FlightSearchForm({ defaultValues, onSearch }: SearchFormProps<Fl
         />
       </SearchField>
 
-      <SearchField id={`${id}-travelers`} label="Travelers" icon={Users} className="lg:flex-[0.8]">
+      <SearchField id={`${id}-travelers`} label="Travelers" icon={Users} className="lg:flex-1">
         <FieldSelect
           id={`${id}-travelers`}
           value={query.travelers}
