@@ -5,10 +5,20 @@ import { CalendarCheck, CalendarDays, CarFront, MapPin } from "lucide-react";
 import { FieldInput, FieldSelect, SearchField } from "@/components/search/SearchField";
 import { SearchSubmit } from "@/components/search/SearchSubmit";
 import { useSearchSubmit, type SearchFormProps } from "@/components/search/useSearchSubmit";
+import type { SelectOption } from "@/components/ui/SelectMenu";
 import { carCategories, carLocations } from "@/data/cars";
 import { useTodayISO } from "@/lib/hooks";
 import { daysBetween, emptyCarQuery, type CarQuery } from "@/lib/search";
 import type { CarCategory } from "@/lib/types";
+
+const locationOptions: SelectOption[] = [
+  { value: "", label: "Any location" },
+  ...carLocations.map((city) => ({ value: city, label: city })),
+];
+const categoryOptions: SelectOption[] = [
+  { value: "", label: "Any type" },
+  ...carCategories.map((c) => ({ value: c, label: c })),
+];
 
 export function CarSearchForm({ defaultValues, onSearch }: SearchFormProps<CarQuery>) {
   const id = useId();
@@ -32,16 +42,14 @@ export function CarSearchForm({ defaultValues, onSearch }: SearchFormProps<CarQu
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Search rental cars" className="grid gap-3 sm:grid-cols-2 lg:flex lg:items-start">
+    <form onSubmit={handleSubmit} noValidate aria-label="Search rental cars" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:items-start">
       <SearchField id={`${id}-location`} label="Pick-up location" icon={MapPin} className="sm:col-span-2 lg:flex-[1.5]">
-        <FieldSelect id={`${id}-location`} value={query.location} onChange={(e) => update("location", e.target.value)}>
-          <option value="">Any location</option>
-          {carLocations.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </FieldSelect>
+        <FieldSelect
+          id={`${id}-location`}
+          value={query.location}
+          options={locationOptions}
+          onChange={(v) => update("location", v)}
+        />
       </SearchField>
 
       <SearchField id={`${id}-pickup`} label="Pick-up date" icon={CalendarDays} className="lg:flex-1">
@@ -70,15 +78,9 @@ export function CarSearchForm({ defaultValues, onSearch }: SearchFormProps<CarQu
         <FieldSelect
           id={`${id}-category`}
           value={query.category}
-          onChange={(e) => update("category", e.target.value as CarCategory | "")}
-        >
-          <option value="">Any type</option>
-          {carCategories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </FieldSelect>
+          options={categoryOptions}
+          onChange={(v) => update("category", v as CarCategory | "")}
+        />
       </SearchField>
 
       <SearchSubmit label="Find cars" />

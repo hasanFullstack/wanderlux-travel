@@ -1,9 +1,6 @@
-import type {
-  ComponentProps,
-  ReactNode,
-} from "react";
+import type { ComponentProps, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { ChevronDown } from "lucide-react";
+import { SelectMenu, type SelectOption } from "@/components/ui/SelectMenu";
 import { cn } from "@/lib/utils";
 
 type SearchFieldProps = {
@@ -15,7 +12,12 @@ type SearchFieldProps = {
   children: ReactNode;
 };
 
-/** Labelled, icon-led field shell shared by every search form. */
+export const labelIdFor = (id: string) => `${id}-label`;
+
+/**
+ * Labelled, icon-led field shell shared by every search form. The shell is
+ * the positioning context, so dropdown popups match the full field width.
+ */
 export function SearchField({
   id,
   label,
@@ -34,8 +36,9 @@ export function SearchField({
         )}
       >
         <Icon className="size-5 shrink-0 text-brand-600" aria-hidden="true" />
-        <div className="relative min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
           <label
+            id={labelIdFor(id)}
             htmlFor={id}
             className="block text-[0.68rem] font-bold tracking-[0.12em] text-ink-400 uppercase"
           >
@@ -53,27 +56,27 @@ export function SearchField({
   );
 }
 
-const controlClass =
-  "block w-full min-w-0 bg-transparent text-sm font-semibold text-ink-900 outline-none placeholder:font-medium placeholder:text-ink-300 focus-visible:outline-none";
+type FieldSelectProps = {
+  id: string;
+  value: string | number;
+  options: SelectOption[];
+  onChange: (value: string) => void;
+  invalid?: boolean;
+  describedBy?: string;
+};
 
-export function FieldSelect({
-  className,
-  children,
-  ...props
-}: ComponentProps<"select">) {
+/** Custom dropdown wired to the surrounding SearchField's label. */
+export function FieldSelect({ id, value, options, onChange, invalid, describedBy }: FieldSelectProps) {
   return (
-    <div className="relative">
-      <select
-        className={cn(controlClass, "cursor-pointer appearance-none truncate pr-6", className)}
-        {...props}
-      >
-        {children}
-      </select>
-      <ChevronDown
-        className="pointer-events-none absolute top-1/2 right-0 size-4 -translate-y-1/2 text-ink-400"
-        aria-hidden="true"
-      />
-    </div>
+    <SelectMenu
+      id={id}
+      labelId={labelIdFor(id)}
+      value={String(value)}
+      options={options}
+      onChange={onChange}
+      invalid={invalid}
+      describedBy={describedBy}
+    />
   );
 }
 
@@ -81,7 +84,7 @@ export function FieldInput({ className, ...props }: ComponentProps<"input">) {
   return (
     <input
       className={cn(
-        controlClass,
+        "block w-full min-w-0 bg-transparent text-sm font-semibold text-ink-900 outline-none placeholder:font-medium placeholder:text-ink-300 focus-visible:outline-none",
         "[&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60",
         className,
       )}

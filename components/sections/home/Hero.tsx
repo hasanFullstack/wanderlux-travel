@@ -123,20 +123,22 @@ export function Hero({ search }: HeroProps) {
     <section
       ref={rootRef}
       aria-labelledby="hero-heading"
-      className="relative isolate flex min-h-svh flex-col overflow-hidden bg-ink-950 text-white"
+      className="relative isolate z-10 flex min-h-svh flex-col bg-ink-950 text-white"
     >
-      {/* Background */}
-      <div data-hero-parallax aria-hidden="true" className="absolute inset-0 -z-10">
-        <div data-hero-bg className="absolute inset-0 motion-safe:[transform:scale(1.18)]">
-          <Image
-            src="/images/hero/hero-mountains.jpg"
-            alt=""
-            fill
-            preload
-            loading="eager"
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+      {/* Background — clipped here (not on the section) so dropdowns can overflow */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+        <div data-hero-parallax className="absolute inset-0">
+          <div data-hero-bg className="absolute inset-0 motion-safe:[transform:scale(1.18)]">
+            <Image
+              src="/images/hero/hero-mountains.jpg"
+              alt=""
+              fill
+              preload
+              loading="eager"
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -149,7 +151,7 @@ export function Hero({ search }: HeroProps) {
       />
 
       <div className="container-page flex flex-1 flex-col pt-32 pb-10 sm:pt-36 lg:pt-40">
-        <div className="grid flex-1 items-center gap-12 lg:grid-cols-12">
+        <div className="grid flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-12">
           {/* Copy */}
           <div className="lg:col-span-7">
             <p

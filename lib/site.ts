@@ -16,6 +16,7 @@ export const siteConfig = {
     phoneHref: "tel:+923155859158",
     email: "hasanamin877@gmail.com",
     emailHref: "mailto:hasanamin877@gmail.com",
+    whatsappHref: "https://wa.me/923155859158",
     address: "Available worldwide — online & by appointment",
     hours: "Mon – Sat, 9:00 – 19:00 (PKT)",
   },

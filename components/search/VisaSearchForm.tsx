@@ -5,9 +5,20 @@ import { Flag, Globe2, ScrollText } from "lucide-react";
 import { FieldSelect, SearchField } from "@/components/search/SearchField";
 import { SearchSubmit } from "@/components/search/SearchSubmit";
 import { useSearchSubmit, type SearchFormProps } from "@/components/search/useSearchSubmit";
+import type { SelectOption } from "@/components/ui/SelectMenu";
 import { nationalities, visaCountries, visaTypes } from "@/data/visa";
 import { emptyVisaQuery, type VisaQuery } from "@/lib/search";
 import type { VisaType } from "@/lib/types";
+
+const countryOptions: SelectOption[] = [
+  { value: "", label: "Any destination" },
+  ...visaCountries.map((c) => ({ value: c.id, label: c.country })),
+];
+const nationalityOptions: SelectOption[] = nationalities.map((n) => ({ value: n, label: n }));
+const typeOptions: SelectOption[] = [
+  { value: "", label: "Any type" },
+  ...visaTypes.map((t) => ({ value: t, label: t })),
+];
 
 export function VisaSearchForm({ defaultValues, onSearch }: SearchFormProps<VisaQuery>) {
   const id = useId();
@@ -23,45 +34,32 @@ export function VisaSearchForm({ defaultValues, onSearch }: SearchFormProps<Visa
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Search visa requirements" className="grid gap-3 sm:grid-cols-2 lg:flex lg:items-start">
+    <form onSubmit={handleSubmit} noValidate aria-label="Search visa requirements" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:items-start">
       <SearchField id={`${id}-country`} label="Travelling to" icon={Globe2} className="sm:col-span-2 lg:flex-[1.6]">
-        <FieldSelect id={`${id}-country`} value={query.country} onChange={(e) => update("country", e.target.value)}>
-          <option value="">Any destination</option>
-          {visaCountries.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.country}
-            </option>
-          ))}
-        </FieldSelect>
+        <FieldSelect
+          id={`${id}-country`}
+          value={query.country}
+          options={countryOptions}
+          onChange={(v) => update("country", v)}
+        />
       </SearchField>
 
       <SearchField id={`${id}-nationality`} label="Passport" icon={Flag} className="lg:flex-1">
         <FieldSelect
           id={`${id}-nationality`}
           value={query.nationality}
-          onChange={(e) => update("nationality", e.target.value)}
-        >
-          {nationalities.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </FieldSelect>
+          options={nationalityOptions}
+          onChange={(v) => update("nationality", v)}
+        />
       </SearchField>
 
       <SearchField id={`${id}-type`} label="Visa type" icon={ScrollText} className="lg:flex-1">
         <FieldSelect
           id={`${id}-type`}
           value={query.type}
-          onChange={(e) => update("type", e.target.value as VisaType | "")}
-        >
-          <option value="">Any type</option>
-          {visaTypes.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </FieldSelect>
+          options={typeOptions}
+          onChange={(v) => update("type", v as VisaType | "")}
+        />
       </SearchField>
 
       <SearchSubmit label="Check visa" />

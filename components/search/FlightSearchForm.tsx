@@ -12,10 +12,24 @@ import {
 import { FieldInput, FieldSelect, SearchField } from "@/components/search/SearchField";
 import { SearchSubmit } from "@/components/search/SearchSubmit";
 import { useSearchSubmit, type SearchFormProps } from "@/components/search/useSearchSubmit";
+import type { SelectOption } from "@/components/ui/SelectMenu";
 import { airports, cabinClasses } from "@/data/flights";
 import { useTodayISO } from "@/lib/hooks";
 import { emptyFlightQuery, type FlightQuery } from "@/lib/search";
 import type { CabinClass } from "@/lib/types";
+
+const airportOptions: SelectOption[] = [
+  { value: "", label: "Any city" },
+  ...airports.map((a) => ({ value: a.code, label: `${a.city} (${a.code})` })),
+];
+const travelerOptions: SelectOption[] = [1, 2, 3, 4, 5, 6].map((n) => ({
+  value: String(n),
+  label: `${n} ${n === 1 ? "adult" : "adults"}`,
+}));
+const cabinOptions: SelectOption[] = [
+  { value: "", label: "Any class" },
+  ...cabinClasses.map((c) => ({ value: c, label: c })),
+];
 
 export function FlightSearchForm({ defaultValues, onSearch }: SearchFormProps<FlightQuery>) {
   const id = useId();
@@ -41,17 +55,15 @@ export function FlightSearchForm({ defaultValues, onSearch }: SearchFormProps<Fl
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Search flights" className="grid gap-3 sm:grid-cols-2 lg:flex lg:items-start">
-      <div className="relative grid gap-3 sm:col-span-2 sm:grid-cols-2 lg:flex-[2.2]">
+    <form onSubmit={handleSubmit} noValidate aria-label="Search flights" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:items-start">
+      <div className="relative grid grid-cols-1 gap-3 sm:col-span-2 sm:grid-cols-2 lg:flex-[2.2]">
         <SearchField id={`${id}-from`} label="From" icon={PlaneTakeoff}>
-          <FieldSelect id={`${id}-from`} value={query.from} onChange={(e) => update("from", e.target.value)}>
-            <option value="">Any city</option>
-            {airports.map((a) => (
-              <option key={a.code} value={a.code}>
-                {a.city} ({a.code})
-              </option>
-            ))}
-          </FieldSelect>
+          <FieldSelect
+            id={`${id}-from`}
+            value={query.from}
+            options={airportOptions}
+            onChange={(v) => update("from", v)}
+          />
         </SearchField>
 
         <button
@@ -67,17 +79,11 @@ export function FlightSearchForm({ defaultValues, onSearch }: SearchFormProps<Fl
           <FieldSelect
             id={`${id}-to`}
             value={query.to}
-            onChange={(e) => update("to", e.target.value)}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? `${id}-to-error` : undefined}
-          >
-            <option value="">Any city</option>
-            {airports.map((a) => (
-              <option key={a.code} value={a.code}>
-                {a.city} ({a.code})
-              </option>
-            ))}
-          </FieldSelect>
+            options={airportOptions}
+            onChange={(v) => update("to", v)}
+            invalid={Boolean(error)}
+            describedBy={error ? `${id}-to-error` : undefined}
+          />
         </SearchField>
       </div>
 
@@ -95,29 +101,18 @@ export function FlightSearchForm({ defaultValues, onSearch }: SearchFormProps<Fl
         <FieldSelect
           id={`${id}-travelers`}
           value={query.travelers}
-          onChange={(e) => update("travelers", Number(e.target.value))}
-        >
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <option key={n} value={n}>
-              {n} {n === 1 ? "adult" : "adults"}
-            </option>
-          ))}
-        </FieldSelect>
+          options={travelerOptions}
+          onChange={(v) => update("travelers", Number(v))}
+        />
       </SearchField>
 
       <SearchField id={`${id}-cabin`} label="Cabin" icon={Crown} className="sm:col-span-2 lg:flex-1">
         <FieldSelect
           id={`${id}-cabin`}
           value={query.cabin}
-          onChange={(e) => update("cabin", e.target.value as CabinClass | "")}
-        >
-          <option value="">Any class</option>
-          {cabinClasses.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </FieldSelect>
+          options={cabinOptions}
+          onChange={(v) => update("cabin", v as CabinClass | "")}
+        />
       </SearchField>
 
       <SearchSubmit label="Search flights" />

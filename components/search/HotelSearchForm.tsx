@@ -5,11 +5,16 @@ import { CalendarCheck, CalendarDays, MapPin, Users } from "lucide-react";
 import { FieldInput, FieldSelect, SearchField } from "@/components/search/SearchField";
 import { SearchSubmit } from "@/components/search/SearchSubmit";
 import { useSearchSubmit, type SearchFormProps } from "@/components/search/useSearchSubmit";
+import type { SelectOption } from "@/components/ui/SelectMenu";
 import { hotels } from "@/data/hotels";
 import { useTodayISO } from "@/lib/hooks";
 import { daysBetween, emptyHotelQuery, type HotelQuery } from "@/lib/search";
 
 const destinations = Array.from(new Set(hotels.map((h) => h.city))).sort();
+const guestOptions: SelectOption[] = [1, 2, 3, 4, 5, 6].map((n) => ({
+  value: String(n),
+  label: `${n} ${n === 1 ? "guest" : "guests"}`,
+}));
 
 type Errors = Partial<Record<"checkIn" | "checkOut", string>>;
 
@@ -40,7 +45,7 @@ export function HotelSearchForm({ defaultValues, onSearch }: SearchFormProps<Hot
   const listId = `${id}-destinations`;
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Search hotels" className="grid gap-3 sm:grid-cols-2 lg:flex lg:items-start">
+    <form onSubmit={handleSubmit} noValidate aria-label="Search hotels" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:items-start">
       <SearchField id={`${id}-destination`} label="Destination" icon={MapPin} className="sm:col-span-2 lg:flex-[1.6]">
         <FieldInput
           id={`${id}-destination`}
@@ -83,13 +88,12 @@ export function HotelSearchForm({ defaultValues, onSearch }: SearchFormProps<Hot
       </SearchField>
 
       <SearchField id={`${id}-guests`} label="Guests" icon={Users} className="sm:col-span-2 lg:flex-[0.8]">
-        <FieldSelect id={`${id}-guests`} value={query.guests} onChange={(e) => update("guests", Number(e.target.value))}>
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <option key={n} value={n}>
-              {n} {n === 1 ? "guest" : "guests"}
-            </option>
-          ))}
-        </FieldSelect>
+        <FieldSelect
+          id={`${id}-guests`}
+          value={query.guests}
+          options={guestOptions}
+          onChange={(v) => update("guests", Number(v))}
+        />
       </SearchField>
 
       <SearchSubmit label="Search hotels" />
