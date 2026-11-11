@@ -21,7 +21,7 @@ export default function FlightsPage() {
         eyebrow="Flight tickets"
         title={<>Fly further, <em className="text-gold-300">for less</em></>}
         description="Search routes from Lahore, Karachi, Islamabad and major hubs worldwide. Filter by cabin, stops and refundable fares — then let our team lock in the best price."
-        image="/images/services/flights.jpg"
+        image="/images/hero/hero-flights.jpg"
         crumb="Flights"
         path="/flights"
         highlights={["Best-fare guarantee","Flexible tickets","24/7 rebooking"]}

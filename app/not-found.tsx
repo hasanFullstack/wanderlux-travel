@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { services } from "@/data/services";
+import { HERO_IMAGE_QUALITY } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -17,11 +18,12 @@ export default function NotFound() {
       className="relative isolate flex min-h-svh items-center overflow-hidden bg-ink-950 py-32 text-white"
     >
       <Image
-        src="/images/destinations/swiss-alps.jpg"
+        src="/images/hero/hero-404.jpg"
         alt=""
         fill
         preload
         loading="eager"
+        quality={HERO_IMAGE_QUALITY}
         sizes="100vw"
         className="-z-20 object-cover opacity-40"
       />

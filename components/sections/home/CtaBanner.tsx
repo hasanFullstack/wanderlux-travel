@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { siteConfig } from "@/lib/site";
+import { HERO_IMAGE_QUALITY, siteConfig } from "@/lib/site";
 
 export function CtaBanner() {
   return (
@@ -12,9 +12,10 @@ export function CtaBanner() {
           className="relative isolate overflow-hidden rounded-[2rem] px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24"
         >
           <Image
-            src="/images/destinations/maldives.jpg"
+            src="/images/hero/hero-cta.jpg"
             alt=""
             fill
+            quality={HERO_IMAGE_QUALITY}
             sizes="(min-width: 1280px) 1216px, 100vw"
             className="-z-20 object-cover"
           />

@@ -1,20 +1,10 @@
 import { Armchair, BadgeCheck, Luggage, Plane } from "lucide-react";
 import { Pill, PriceTag, ResultCard } from "@/components/cards/ResultCard";
+import { AirlineLogo } from "@/components/ui/AirlineLogo";
 import { Button } from "@/components/ui/Button";
 import { bookingHref, formatShortDate, type FlightQuery } from "@/lib/search";
 import type { Flight } from "@/lib/types";
 import { formatDuration, formatPrice } from "@/lib/utils";
-
-const airlineColors: Record<string, string> = {
-  AU: "bg-brand-600 text-white",
-  SW: "bg-ink-800 text-white",
-  NB: "bg-sky-700 text-white",
-  MR: "bg-rose-700 text-white",
-  FG: "bg-gold-400 text-ink-950",
-  AG: "bg-emerald-700 text-white",
-  SK: "bg-pink-700 text-white",
-  PC: "bg-indigo-600 text-white",
-};
 
 type FlightResultCardProps = { flight: Flight; query: FlightQuery };
 
@@ -43,12 +33,7 @@ export function FlightResultCard({ flight, query }: FlightResultCardProps) {
       }
     >
       <div className="flex flex-wrap items-center gap-3">
-        <span
-          aria-hidden="true"
-          className={`grid size-10 place-items-center rounded-xl text-xs font-bold ${airlineColors[flight.airlineCode] ?? "bg-ink-700 text-white"}`}
-        >
-          {flight.airlineCode}
-        </span>
+        <AirlineLogo code={flight.airlineCode} />
         <div className="mr-auto">
           <h3 className="font-semibold text-ink-900">{flight.airline}</h3>
           <p className="text-xs text-ink-400">

@@ -30,4 +30,7 @@ export const siteConfig = {
   ],
 } as const;
 
+/** Image quality for full-bleed hero photos (must be listed in next.config images.qualities). */
+export const HERO_IMAGE_QUALITY = 90;
+
 export type NavItem = (typeof siteConfig.nav)[number];

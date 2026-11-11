@@ -44,7 +44,7 @@ export default function ContactPage() {
           </>
         }
         description="Tell us where you'd like to go and a dedicated travel expert will reply with ideas, prices and next steps — usually within a couple of hours."
-        image="/images/misc/planning.jpg"
+        image="/images/hero/hero-contact.jpg"
         crumb="Contact"
         path="/contact"
         highlights={["Free trip planning", "Reply within 24 hours", "Real human experts"]}

@@ -4,6 +4,7 @@ import { Check, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
+import { HERO_IMAGE_QUALITY } from "@/lib/site";
 
 type PageHeroProps = {
   eyebrow: string;
@@ -43,6 +44,7 @@ export function PageHero({
         fill
         preload
         loading="eager"
+        quality={HERO_IMAGE_QUALITY}
         sizes="100vw"
         className="-z-20 object-cover"
       />

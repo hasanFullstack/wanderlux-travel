@@ -21,7 +21,7 @@ export default function CarsPage() {
         eyebrow="Car rental"
         title={<>The open road, <em className="text-gold-300">your way</em></>}
         description="Economy runabouts, family SUVs, electric and luxury cars — transparent pricing, insurance included and no surprises at the counter."
-        image="/images/cars/car-2.jpg"
+        image="/images/hero/hero-cars.jpg"
         crumb="Cars"
         path="/cars"
         highlights={["No hidden fees","Insurance included","Airport pickup"]}

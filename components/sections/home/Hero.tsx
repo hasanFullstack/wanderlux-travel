@@ -8,6 +8,7 @@ import { destinations } from "@/data/destinations";
 import { flights } from "@/data/flights";
 import { testimonials } from "@/data/testimonials";
 import { MOTION, gsap, useGSAP } from "@/lib/gsap";
+import { HERO_IMAGE_QUALITY } from "@/lib/site";
 import { cn, formatPrice } from "@/lib/utils";
 
 const featured = destinations[0];
@@ -135,6 +136,7 @@ export function Hero({ search }: HeroProps) {
               fill
               preload
               loading="eager"
+              quality={HERO_IMAGE_QUALITY}
               sizes="100vw"
               className="object-cover object-center"
             />

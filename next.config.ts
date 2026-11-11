@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    // 75 = default for cards/thumbnails, 90 = full-bleed hero photography.
+    qualities: [75, 90],
   },
   turbopack: {
     rules: {

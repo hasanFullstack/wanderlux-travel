@@ -21,7 +21,7 @@ export default function VisaPage() {
         eyebrow="Visa services"
         title={<>Visas, <em className="text-gold-300">sorted</em></>}
         description="Check requirements, processing times and fees for popular destinations. Our specialists review your documents, book appointments and track every step."
-        image="/images/visa/canada.jpg"
+        image="/images/hero/hero-visa.jpg"
         crumb="Visa"
         path="/visa"
         highlights={["98% approval rate","Document review","Live status tracking"]}
