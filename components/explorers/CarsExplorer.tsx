@@ -4,11 +4,14 @@ import { useMemo, useState } from "react";
 import { Gauge, Settings2 } from "lucide-react";
 import { CarResultCard } from "@/components/cards/results/CarResultCard";
 import { EmptyState, ResultsSection, SearchPanel, SortSelect, ToggleChip } from "@/components/results/Results";
+import { usePagination } from "@/components/results/Pagination";
 import { useUrlQuery } from "@/components/results/useUrlQuery";
 import { CarSearchForm } from "@/components/search/CarSearchForm";
 import { cars } from "@/data/cars";
 import { filterCars, sortCars, type CarSort } from "@/lib/filters";
 import { daysBetween, formatShortDate, parseCarQuery } from "@/lib/search";
+
+const PAGE_SIZE = 5;
 
 const sortOptions = [
   { value: "price-asc", label: "Price: low to high" },
@@ -32,6 +35,10 @@ export function CarsExplorer() {
       ),
     [query, sort, automatic, unlimited],
   );
+
+  // Reset to page 1 whenever the search, sort or filters change.
+  const resetKey = `${key}|${sort}|${automatic}|${unlimited}`;
+  const pager = usePagination(results, PAGE_SIZE, resetKey);
 
   const days = query.pickup && query.dropoff ? Math.max(1, daysBetween(query.pickup, query.dropoff)) : 0;
   const summary = [
@@ -57,7 +64,8 @@ export function CarsExplorer() {
         count={results.length}
         noun="car"
         summary={summary}
-        animationKey={`${key}|${sort}|${automatic}|${unlimited}`}
+        animationKey={`${resetKey}|${pager.page}`}
+        pagination={pager}
         toolbar={
           <>
             <ToggleChip pressed={automatic} onToggle={() => setAutomatic((v) => !v)} icon={Settings2}>
@@ -77,7 +85,7 @@ export function CarsExplorer() {
           />
         }
       >
-        {results.map((car) => (
+        {pager.pageItems.map((car) => (
           <li key={car.id}>
             <CarResultCard car={car} query={query} />
           </li>

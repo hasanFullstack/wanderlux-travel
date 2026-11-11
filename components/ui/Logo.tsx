@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/ui/LogoMark";
-import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type LogoProps = {
@@ -24,7 +23,6 @@ export function Logo({
     <Link
       href="/"
       onClick={onClick}
-      aria-label={`${siteConfig.name} — home`}
       className={cn("group inline-flex items-center gap-3", className)}
     >
       <LogoMark

@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 type PageHeroProps = {
   eyebrow: string;
@@ -10,6 +12,8 @@ type PageHeroProps = {
   image: string;
   /** Current page label for the breadcrumb trail. */
   crumb: string;
+  /** Route path, used for BreadcrumbList structured data. */
+  path: string;
   highlights?: string[];
   /** Extra bottom padding when a search panel overlaps the hero. */
   overlap?: boolean;
@@ -22,6 +26,7 @@ export function PageHero({
   description,
   image,
   crumb,
+  path,
   highlights = [],
   overlap = false,
 }: PageHeroProps) {
@@ -46,6 +51,7 @@ export function PageHero({
         className="absolute inset-0 -z-10 bg-linear-to-r from-ink-950/95 via-ink-950/75 to-ink-950/35"
       />
 
+      <JsonLd data={breadcrumbSchema(crumb, path)} />
       <div className="container-page">
         <nav aria-label="Breadcrumb" data-reveal data-hero-hide>
           <ol className="flex items-center gap-1.5 text-sm text-ink-200">

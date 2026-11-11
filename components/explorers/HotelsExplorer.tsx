@@ -4,11 +4,14 @@ import { useMemo, useState } from "react";
 import { BadgeCheck, Coffee } from "lucide-react";
 import { HotelResultCard } from "@/components/cards/results/HotelResultCard";
 import { EmptyState, ResultsSection, SearchPanel, SortSelect, ToggleChip } from "@/components/results/Results";
+import { usePagination } from "@/components/results/Pagination";
 import { useUrlQuery } from "@/components/results/useUrlQuery";
 import { HotelSearchForm } from "@/components/search/HotelSearchForm";
 import { hotels } from "@/data/hotels";
 import { filterHotels, sortHotels, type HotelSort } from "@/lib/filters";
 import { daysBetween, formatShortDate, parseHotelQuery } from "@/lib/search";
+
+const PAGE_SIZE = 5;
 
 const sortOptions = [
   { value: "rating", label: "Top rated" },
@@ -32,6 +35,10 @@ export function HotelsExplorer() {
       ),
     [query, sort, freeCancel, breakfast],
   );
+
+  // Reset to page 1 whenever the search, sort or filters change.
+  const resetKey = `${key}|${sort}|${freeCancel}|${breakfast}`;
+  const pager = usePagination(results, PAGE_SIZE, resetKey);
 
   const nights = daysBetween(query.checkIn, query.checkOut);
   const summary = [
@@ -59,7 +66,8 @@ export function HotelsExplorer() {
         count={results.length}
         noun="stay"
         summary={summary}
-        animationKey={`${key}|${sort}|${freeCancel}|${breakfast}`}
+        animationKey={`${resetKey}|${pager.page}`}
+        pagination={pager}
         toolbar={
           <>
             <ToggleChip pressed={freeCancel} onToggle={() => setFreeCancel((v) => !v)} icon={BadgeCheck}>
@@ -79,7 +87,7 @@ export function HotelsExplorer() {
           />
         }
       >
-        {results.map((hotel) => (
+        {pager.pageItems.map((hotel) => (
           <li key={hotel.id}>
             <HotelResultCard hotel={hotel} query={query} />
           </li>

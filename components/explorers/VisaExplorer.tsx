@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { EmptyState, ResultsSection, SearchPanel, SortSelect, ToggleChip } from "@/components/results/Results";
+import { usePagination } from "@/components/results/Pagination";
 import { useUrlQuery } from "@/components/results/useUrlQuery";
 import { VisaResultCard } from "@/components/cards/results/VisaResultCard";
 import { VisaSearchForm } from "@/components/search/VisaSearchForm";
@@ -9,6 +10,8 @@ import { visaCountries } from "@/data/visa";
 import { filterVisas, sortVisas, type VisaSort } from "@/lib/filters";
 import { parseVisaQuery } from "@/lib/search";
 import type { VisaCountry } from "@/lib/types";
+
+const PAGE_SIZE = 5;
 
 const sortOptions = [
   { value: "processing", label: "Fastest processing" },
@@ -27,6 +30,10 @@ export function VisaExplorer() {
     () => sortVisas(filterVisas(visaCountries, query).filter((v) => !mode || v.mode === mode), sort),
     [query, sort, mode],
   );
+
+  // Reset to page 1 whenever the search, sort or filters change.
+  const resetKey = `${key}|${sort}|${mode}`;
+  const pager = usePagination(results, PAGE_SIZE, resetKey);
 
   const country = visaCountries.find((v) => v.id === query.country)?.country;
   const summary = [
@@ -51,7 +58,8 @@ export function VisaExplorer() {
         count={results.length}
         noun="visa option"
         summary={summary}
-        animationKey={`${key}|${sort}|${mode}`}
+        animationKey={`${resetKey}|${pager.page}`}
+        pagination={pager}
         toolbar={
           <>
             {modes.map((m) => (
@@ -70,7 +78,7 @@ export function VisaExplorer() {
           />
         }
       >
-        {results.map((visa) => (
+        {pager.pageItems.map((visa) => (
           <li key={visa.id}>
             <VisaResultCard visa={visa} query={query} />
           </li>

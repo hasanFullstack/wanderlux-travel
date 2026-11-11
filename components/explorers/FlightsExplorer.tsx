@@ -4,11 +4,14 @@ import { useMemo, useState } from "react";
 import { BadgeCheck, Route } from "lucide-react";
 import { FlightResultCard } from "@/components/cards/results/FlightResultCard";
 import { EmptyState, ResultsSection, SearchPanel, SortSelect, ToggleChip } from "@/components/results/Results";
+import { usePagination } from "@/components/results/Pagination";
 import { useUrlQuery } from "@/components/results/useUrlQuery";
 import { FlightSearchForm } from "@/components/search/FlightSearchForm";
 import { airports, flights } from "@/data/flights";
 import { filterFlights, sortFlights, type FlightSort } from "@/lib/filters";
 import { formatShortDate, parseFlightQuery } from "@/lib/search";
+
+const PAGE_SIZE = 5;
 
 const sortOptions = [
   { value: "price", label: "Cheapest first" },
@@ -34,6 +37,10 @@ export function FlightsExplorer() {
       ),
     [query, sort, nonStop, refundable],
   );
+
+  // Reset to page 1 whenever the search, sort or filters change.
+  const resetKey = `${key}|${sort}|${nonStop}|${refundable}`;
+  const pager = usePagination(results, PAGE_SIZE, resetKey);
 
   const summary = [
     query.from || query.to
@@ -62,7 +69,8 @@ export function FlightsExplorer() {
         noun="flight"
         summary={summary}
         media={false}
-        animationKey={`${key}|${sort}|${nonStop}|${refundable}`}
+        animationKey={`${resetKey}|${pager.page}`}
+        pagination={pager}
         toolbar={
           <>
             <ToggleChip pressed={nonStop} onToggle={() => setNonStop((v) => !v)} icon={Route}>
@@ -82,7 +90,7 @@ export function FlightsExplorer() {
           />
         }
       >
-        {results.map((flight) => (
+        {pager.pageItems.map((flight) => (
           <li key={flight.id}>
             <FlightResultCard flight={flight} query={query} />
           </li>

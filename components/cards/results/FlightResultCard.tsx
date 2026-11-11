@@ -6,14 +6,14 @@ import type { Flight } from "@/lib/types";
 import { formatDuration, formatPrice } from "@/lib/utils";
 
 const airlineColors: Record<string, string> = {
-  AU: "bg-brand-600",
-  SW: "bg-ink-800",
-  NB: "bg-sky-600",
-  MR: "bg-rose-600",
-  FG: "bg-gold-500",
-  AG: "bg-emerald-600",
-  SK: "bg-pink-600",
-  PC: "bg-indigo-600",
+  AU: "bg-brand-600 text-white",
+  SW: "bg-ink-800 text-white",
+  NB: "bg-sky-700 text-white",
+  MR: "bg-rose-700 text-white",
+  FG: "bg-gold-400 text-ink-950",
+  AG: "bg-emerald-700 text-white",
+  SK: "bg-pink-700 text-white",
+  PC: "bg-indigo-600 text-white",
 };
 
 type FlightResultCardProps = { flight: Flight; query: FlightQuery };
@@ -45,7 +45,7 @@ export function FlightResultCard({ flight, query }: FlightResultCardProps) {
       <div className="flex flex-wrap items-center gap-3">
         <span
           aria-hidden="true"
-          className={`grid size-10 place-items-center rounded-xl text-xs font-bold text-white ${airlineColors[flight.airlineCode] ?? "bg-ink-700"}`}
+          className={`grid size-10 place-items-center rounded-xl text-xs font-bold ${airlineColors[flight.airlineCode] ?? "bg-ink-700 text-white"}`}
         >
           {flight.airlineCode}
         </span>
@@ -76,7 +76,7 @@ export function FlightResultCard({ flight, query }: FlightResultCardProps) {
             <span className="h-px flex-1 border-t-2 border-dashed border-ink-200" />
             <span className="size-2 rounded-full bg-brand-500" />
           </div>
-          <p className={`text-xs font-semibold ${flight.stops ? "text-gold-600" : "text-emerald-600"}`}>
+          <p className={`text-xs font-semibold ${flight.stops ? "text-gold-700" : "text-emerald-700"}`}>
             {flight.stops ? `1 stop · ${flight.stopover}` : "Non-stop"}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function FlightResultCard({ flight, query }: FlightResultCardProps) {
           <p className="font-display text-2xl font-semibold text-ink-900 tabular-nums">
             {flight.arriveTime}
             {flight.dayOffset > 0 && (
-              <sup className="ml-0.5 text-xs font-bold text-gold-600" title="Arrives next day">
+              <sup className="ml-0.5 text-xs font-bold text-gold-700" title="Arrives next day">
                 +1
               </sup>
             )}

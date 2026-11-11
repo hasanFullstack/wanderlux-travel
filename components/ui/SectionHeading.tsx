@@ -38,7 +38,7 @@ export function SectionHeading({
           data-reveal
           className={cn(
             "inline-flex items-center gap-3 text-xs font-bold tracking-[0.22em] uppercase",
-            isLight ? "text-gold-300" : "text-brand-600",
+            isLight ? "text-gold-300" : "text-brand-700",
           )}
         >
           <span

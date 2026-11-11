@@ -4,6 +4,7 @@ import { useId, useRef, type ReactNode } from "react";
 import { RotateCcw, SearchX, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SelectMenu, type SelectOption } from "@/components/ui/SelectMenu";
+import { Pagination } from "@/components/results/Pagination";
 import { MOTION, gsap, useGSAP } from "@/lib/gsap";
 import { cn, pluralize } from "@/lib/utils";
 
@@ -173,6 +174,15 @@ type ResultsSectionProps = {
   /** Changes whenever the visible list changes, to re-run the entrance stagger. */
   animationKey: string;
   media?: boolean;
+  /** Client-side pagination state from usePagination(). */
+  pagination?: {
+    page: number;
+    pageCount: number;
+    start: number;
+    end: number;
+    total: number;
+    setPage: (page: number) => void;
+  };
   children: ReactNode;
 };
 
@@ -185,9 +195,20 @@ export function ResultsSection({
   empty,
   animationKey,
   media = true,
+  pagination,
   children,
 }: ResultsSectionProps) {
   const listRef = useRef<HTMLUListElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // Change page, bring the list back into view and move focus to its heading.
+  const goToPage = (page: number) => {
+    pagination?.setPage(page);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sectionRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    headingRef.current?.focus({ preventScroll: true });
+  };
 
   useGSAP(
     () => {
@@ -208,6 +229,7 @@ export function ResultsSection({
 
   return (
     <section
+      ref={sectionRef}
       id="results"
       aria-labelledby="results-heading"
       aria-busy={loading}
@@ -215,7 +237,12 @@ export function ResultsSection({
     >
       <div className="flex flex-col gap-5 border-b border-ink-100 pb-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h2 id="results-heading" className="font-display text-3xl font-semibold text-ink-900">
+          <h2
+            ref={headingRef}
+            id="results-heading"
+            tabIndex={-1}
+            className="font-display text-3xl font-semibold text-ink-900 outline-none"
+          >
             {loading ? `Searching ${noun}s…` : `${pluralize(count, noun)} found`}
           </h2>
           <p className="mt-1.5 text-sm text-ink-500">{summary}</p>
@@ -233,9 +260,26 @@ export function ResultsSection({
         ) : count === 0 ? (
           empty
         ) : (
-          <ul ref={listRef} className="grid grid-cols-1 gap-5">
-            {children}
-          </ul>
+          <>
+            <ul ref={listRef} className="grid grid-cols-1 gap-5">
+              {children}
+            </ul>
+            {pagination && pagination.pageCount > 1 && (
+              <div className="mt-10 flex flex-col items-center gap-5 border-t border-ink-100 pt-8 sm:flex-row sm:justify-between">
+                <p className="text-sm text-ink-500" aria-live="polite">
+                  Showing <span className="font-semibold text-ink-900">{pagination.start}–{pagination.end}</span> of{" "}
+                  <span className="font-semibold text-ink-900">{pagination.total}</span> {noun}s
+                </p>
+                <Pagination
+                  page={pagination.page}
+                  pageCount={pagination.pageCount}
+                  onPageChange={goToPage}
+                  label={`${noun.charAt(0).toUpperCase()}${noun.slice(1)}`}
+                  className="w-full sm:w-auto"
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

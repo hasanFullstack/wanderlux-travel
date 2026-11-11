@@ -23,6 +23,7 @@ export default function FlightsPage() {
         description="Search routes from Lahore, Karachi, Islamabad and major hubs worldwide. Filter by cabin, stops and refundable fares — then let our team lock in the best price."
         image="/images/services/flights.jpg"
         crumb="Flights"
+        path="/flights"
         highlights={["Best-fare guarantee","Flexible tickets","24/7 rebooking"]}
       />
       {/* The explorer reads search params, so it renders inside Suspense. */}

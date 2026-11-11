@@ -23,6 +23,7 @@ export default function CarsPage() {
         description="Economy runabouts, family SUVs, electric and luxury cars — transparent pricing, insurance included and no surprises at the counter."
         image="/images/cars/car-2.jpg"
         crumb="Cars"
+        path="/cars"
         highlights={["No hidden fees","Insurance included","Airport pickup"]}
       />
       {/* The explorer reads search params, so it renders inside Suspense. */}

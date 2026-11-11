@@ -23,6 +23,7 @@ export default function HotelsPage() {
         description="From overwater villas in the Maldives to boutique gems in Paris and five-star comfort in Lahore — every property is vetted by our team."
         image="/images/hotels/hotel-2.jpg"
         crumb="Hotels"
+        path="/hotels"
         highlights={["Member-only rates","Free cancellation","Verified reviews"]}
       />
       {/* The explorer reads search params, so it renders inside Suspense. */}

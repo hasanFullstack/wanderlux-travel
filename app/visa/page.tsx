@@ -23,6 +23,7 @@ export default function VisaPage() {
         description="Check requirements, processing times and fees for popular destinations. Our specialists review your documents, book appointments and track every step."
         image="/images/visa/canada.jpg"
         crumb="Visa"
+        path="/visa"
         highlights={["98% approval rate","Document review","Live status tracking"]}
       />
       {/* The explorer reads search params, so it renders inside Suspense. */}
