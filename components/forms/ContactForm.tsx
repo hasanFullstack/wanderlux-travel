@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { CheckCircle2, LoaderCircle, Send } from "lucide-react";
+import { CheckCircle2, LoaderCircle, Send, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SelectMenu, type SelectOption } from "@/components/ui/SelectMenu";
 import { cn, wait } from "@/lib/utils";
@@ -20,7 +20,7 @@ const initialValues: ContactValues = {
   message: "",
 };
 
-const serviceOptions: SelectOption[] = [
+export const serviceOptions: SelectOption[] = [
   { value: "", label: "Select a service" },
   { value: "visa", label: "Visa services" },
   { value: "flights", label: "Flight tickets" },
@@ -64,16 +64,22 @@ function Field({ id, label, optional, error, hint, className, children }: FieldP
   );
 }
 
-type ContactFormProps = { className?: string };
+type ContactFormProps = {
+  className?: string;
+  /** Pre-filled values, e.g. from a "Book now" link. */
+  defaultValues?: Partial<ContactValues>;
+  /** Optional banner shown above the fields (e.g. the item being booked). */
+  notice?: string;
+};
 
 /**
  * Contact form with client-side validation: errors appear after a field is
  * blurred (or on submit), the first invalid field is focused on submit, and a
  * simulated request shows a loading state then a success message.
  */
-export function ContactForm({ className }: ContactFormProps) {
+export function ContactForm({ className, defaultValues, notice }: ContactFormProps) {
   const id = useId();
-  const [values, setValues] = useState<ContactValues>(initialValues);
+  const [values, setValues] = useState<ContactValues>({ ...initialValues, ...defaultValues });
   const [touched, setTouched] = useState<Partial<Record<keyof ContactValues, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
@@ -155,6 +161,14 @@ export function ContactForm({ className }: ContactFormProps) {
       aria-busy={submitting}
       className={cn("rounded-3xl bg-white p-6 shadow-soft ring-1 ring-ink-100 sm:p-8", className)}
     >
+      {notice && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl bg-gold-50 p-4 text-sm text-ink-700 ring-1 ring-gold-100">
+          <Sparkles className="mt-0.5 size-4 shrink-0 text-gold-600" aria-hidden="true" />
+          <p>
+            <span className="font-semibold text-ink-900">Booking request:</span> {notice}
+          </p>
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <Field id={fieldId("name")} label="Full name" error={errorFor("name")}>
           <input

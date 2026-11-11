@@ -1,4 +1,4 @@
-import type { CabinClass, CarCategory, VisaType } from "@/lib/types";
+import type { CabinClass, CarCategory, ServiceId, VisaType } from "@/lib/types";
 
 /* ------------------------------------------------------------------
    Search query shapes shared by the hero widget and service pages.
@@ -111,6 +111,11 @@ export function toSearchParams(query: Record<string, string | number>) {
     if (value !== "" && value !== undefined) params.set(key, String(value));
   }
   return params.toString();
+}
+
+/** Link to the contact page with the form pre-filled for a booking request. */
+export function bookingHref(service: ServiceId, ref: string) {
+  return `/contact?${toSearchParams({ service, ref })}`;
 }
 
 /* ------------------------------------------------------------------
