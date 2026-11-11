@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Navbar } from "@/components/layout/Navbar";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <Navbar />
         <main id="main" className="flex-1">
           {children}
         </main>
